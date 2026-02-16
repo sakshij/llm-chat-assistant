@@ -1,258 +1,278 @@
-# Research Tree Extension - v2.0 (Complete & Tested)
+# LLM Chat assistant 🌳
 
-A lightweight, sleek research management extension for Claude.ai, ChatGPT, and Gemini. Capture, organize, and manage your findings with a modern SaaS-like interface.
+> Capture, organize, and manage your research findings from Claude, ChatGPT, and Gemini
 
----
+[![Chrome Web Store](https://img.shields.io/badge/Chrome-Web%20Store-blue?logo=google-chrome)](https://chrome.google.com/webstore)
+[![Version](https://img.shields.io/badge/version-1.0.0-green.svg)](https://github.com/sakshij/llm-chat-assistant)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-## ✨ Features
+## 📖 Overview
 
-✓ **Text Selection Capture** - Select 4+ words to add Todo/Finding/Question  
-✓ **Nested Organization** - 1 level of nesting (up to 20 items per parent)  
-✓ **Multiple Platforms** - Claude.ai, ChatGPT, Gemini with auto-detection  
-✓ **Smart Scoping** - Separate research per project/chat automatically  
-✓ **3 Sidebar Modes** - Full (30vw × 90vh), Half (30vw × 50vh), Minimized (icon)  
-✓ **Checkbox Tracking** - Mark todos complete with strikethrough  
-✓ **Context Jumps** - Click 🔗 to auto-scroll to original text  
-✓ **Search & Filter** - Real-time filtering  
-✓ **Export/Import** - JSON backup/restore  
-✓ **Modern Design** - Slack-inspired, dark mode  
-✓ **No Alerts** - Inline errors only  
+LLM chat assistant is a lightweight Chrome extension that helps researchers, students, and professionals organize insights from AI conversations. Capture important findings, todos or mark deep dives for later with a simple text selection, organize them systematically, and never lose track of valuable research again.
 
----
-
-## 📥 Installation
-
-### 1. Download Files
-Get all files from `/outputs`:
-- `manifest.json`
-- `content-script.js`
-- `styles.css`
-- `background.js`
-
-### 2. Load Extension
-1. Open `chrome://extensions/`
-2. Enable **Developer Mode** (top right)
-3. Click **Load unpacked**
-4. Select the folder with extension files
-
-### 3. Verify
-- Visit claude.ai, chatgpt.com, or gemini.google.com
-- Sidebar should appear on right side
+**Key Features:**
+- 💡 Instant capture from text selection
+- 📝 Three item types: Notes, Todos, Questions
+- 🔗 Jump back to original context
+- 🔍 Real-time search and filtering
+- 💾 Import/export as JSON
+- 🌙 Dark mode support
+- 🚀 100% local - no backend required
 
 ---
 
-## 🚀 Quick Start
+## 🎯 Why LLM Chat Assistant?
 
-### Capture Text
-1. Highlight **4+ words** from chat
-2. **Popup appears** with 3 buttons:
-   - 💡 Finding
-   - ✓ Todo
-   - ❓ Question
-3. Click type to add
+When working with AI chatbots like Claude, ChatGPT, or Gemini, valuable insights can get lost in long conversations. Research Tree solves this by letting you:
 
-### Add Manually
-1. Click **"+ New Item"** at bottom
-2. Click type (💡/✓/❓)
-3. Type text, click ✓ to save
+1. **Capture instantly** - Select text, click a button, done
+2. **Organize naturally** - Group related findings under parent items
+3. **Find quickly** - Search across all your notes in real-time
+4. **Jump to context** - Click the 🔗 icon to scroll back to the original message
+5. **Work privately** - All data stored locally in your browser
 
-### Add Children
-1. Hover over item
-2. Click **+ Note/Todo/Question**
-3. Type text, click ✓
-
-### Mark Complete
-1. Find Todo item
-2. Click checkbox
-3. Text strikes through
-
-### Jump to Text
-1. Click **🔗 icon** on item
-2. Auto-scrolls to text with yellow highlight
-3. Highlight fades after 5s
-
-### Search
-1. Type in **search box** at top
-2. Tree filters in real-time
-
-### Sidebar Modes
-- **Full ↔ Half**: Click ⛶ button to toggle
-- **Minimize**: Click − button
-- **Expand**: Click 📋 icon to go to Half mode
+Perfect for:
+- 📚 Academic research
+- 💼 Professional documentation
+- 🧪 Technical exploration
+- ✍️ Creative writing projects
+- 🎓 Learning and note-taking
 
 ---
 
-## 🔧 How It Works
+## 📸 Screenshots
 
-### Platform Detection
+### Text Selection Popup
+<img src="./screenshots/text-selection.png" width="40%" />
+*Select 4+ words to capture findings instantly*
 
-Automatically detects which service you're on and scopes data accordingly:
-
-**Claude.ai:**
-- Detects projects from header (Project Name / Chat Name)
-- Storage key: `claude-project-{name}-{id}` or `claude-{chatId}`
-
-**ChatGPT:**
-- Detects projects from URL (with gptId)
-- Storage key: `chatgpt-gpt-{gptId}-{chatId}` or `chatgpt-{chatId}`
-
-**Gemini:**
-- Detects gems from URL
-- Storage key: `gemini-gem-{name}-{id}` or `gemini-app-{id}`
-
-→ **Each project/chat gets isolated data**
-
-### Storage
-
-- Uses browser **localStorage** (automatic, no setup)
-- Persists across sessions
-- ~10MB capacity (supports 1000+ items)
-- Cleared only if browser cache cleared
+### Organized Research Tree
+<img src="./screenshots/main-interface.png" width="40%" />
+*Your findings organized hierarchically with search*
 
 ---
 
-## 📊 Limits
+## 🚀 Installation
 
-| Limit | Value |
-|-------|-------|
-| Min text to capture | 4 words |
-| Max nesting depth | 1 level |
-| Max items per parent | 20 |
-| Max total per chat | 100 |
-| Highlight duration | 5 seconds |
-| Error display | 4 seconds |
+### From Chrome Web Store (Recommended)
+1. Visit [LLM chat assistant on Chrome Web Store](#) *(coming soon)*
+2. Click "Add to Chrome"
+3. Start using on Claude.ai, ChatGPT, or Gemini
+
+### Manual Installation (Development)
+1. Download or clone this repository
+   ```bash
+   git clone https://github.com/sakshij/llm-chat-assistant
+   cd llm-chat-assistant
+   ```
+
+2. Open Chrome and navigate to `chrome://extensions/`
+
+3. Enable "Developer mode" (toggle in top-right)
+
+4. Click "Load unpacked"
+
+5. Select the `llm-chat-assistant` folder
+
+6. The extension is now installed! Visit Claude.ai, ChatGPT or Gemini to start using it
 
 ---
 
-## 🧪 Testing
+## 🎨 How to Use
 
-### Run Automated Tests
+### 1. Capture from Text Selection
+1. On Claude.ai, ChatGPT, or Gemini, select any text (4+ words)
+2. A popup appears with three options:
+   - 💡 **Note** - General findings or insights
+   - ✓ **Todo** - Action items or tasks
+   - ❓ **Question** - Follow-up questions
+3. Click the appropriate button to save
 
-```bash
-# Install dependencies
-npm install --save-dev puppeteer
+### 2. Add Items Manually
+- Click the footer buttons (💡 Note, ✓ Todo, ❓ Question)
+- Type your content in the inline text box
+- Press ✓ to save or ✕ to cancel
 
-# Run tests
-npm test
+### 3. Organize with Children
+- Each root item can have up to 20 child items
+- Click "+ Note", "+ Todo", or "+ Question" under any root item
+
+### 4. Navigate to Source
+- Items captured from text selection show a 🔗 icon
+- Click it to auto-scroll to the original text
+- The text highlights briefly for easy identification
+
+### 5. Search Your Research
+- Use the search box at the top
+- Results filter in real-time
+- Search across all item text
+
+### 6. Resize the Sidebar
+- Hover over the left edge of the sidebar
+- Drag to resize width
+- Your preferred size is maintained
+
+### 7. Export & Import
+- Click ⬇ in the header to export as JSON
+- Click ⬆ to import previously saved data
+- Great for backups or moving between devices
+
+---
+
+## 🗂️ Data Organization
+
+### Storage Scope
+- **Within a project**: Items are shared across all chats
+- **No project**: Each chat has isolated items
+- **Different projects**: Separate item collections
+
+### Storage Location
+All data is stored locally in your browser using `localStorage`:
+- No cloud sync
+- No external servers
+- Complete privacy
+
+### Limits
+| Feature | Limit |
+|---------|-------|
+| Total items per chat | 100 |
+| Children per parent | 20 |
+| Nesting levels | 1 (no grandchildren) |
+| Storage per domain | ~10MB |
+
+---
+
+## 🛠️ Technical Details
+
+### Built With
+- **Vanilla JavaScript** - No external dependencies
+- **CSS3** - Modern styling with CSS variables
+- **Chrome Extension API** - Manifest V3
+- **localStorage** - Client-side persistence
+
+### Browser Support
+- ✅ Chrome/Chromium (primary)
+- ✅ Microsoft Edge
+- ✅ Brave
+- ⚠️ Firefox (requires adaptation)
+- ⚠️ Safari (requires adaptation)
+
+### File Structure
+```
+llm-chat-assistant/
+├── manifest.json          # Extension configuration
+├── content-script.js      # Main logic (23KB)
+├── styles.css            # Styling (10KB)
+├── background.js         # Service worker
+├── icons/                # Extension icons
+│   ├── icon-16.png
+│   ├── icon-32.png
+│   ├── icon-48.png
+│   └── icon-128.png
+└── README.md             # This file
 ```
 
-### Manual Testing
+---
 
-See `TEST_SUITE.md` for detailed test cases covering:
-- Text selection
-- Adding items
-- Nesting
-- Limits
-- Deletion
-- Checkbox/strikethrough
-- Link jumping
-- Sidebar modes
-- Search
-- Export/import
-- Platform detection
-- Edge cases
+## 🔒 Privacy & Permissions
+
+### What We Access
+- ✅ **Page content** - To detect text selection on LLM sites
+- ✅ **localStorage** - To save your research locally
+- ✅ **DOM manipulation** - To inject the sidebar UI
+
+### What We DON'T Do
+- ❌ No data collection
+- ❌ No external servers
+- ❌ No analytics or tracking
+- ❌ No cloud sync
+- ❌ No account required
+
+**Your research stays on your device, period.**
+
+### Required Permissions
+- `storage` - Save data locally
+- `scripting` - Inject sidebar on LLM pages
+- `activeTab` - Detect current page context
 
 ---
 
-## ⚙️ Troubleshooting
+## 🤝 Contributing
 
-| Problem | Solution |
-|---------|----------|
-| Sidebar not appearing | Hard refresh: `Ctrl+Shift+R` |
-| Popup won't appear | Select 4+ words in chat area |
-| Data lost | Check you're in same chat/project |
-| Dark mode not working | Enable system dark mode in settings |
-| Items not saving | Verify localStorage enabled, not in private mode |
+Contributions are welcome! Here's how you can help:
 
----
+### Report Bugs
+Open an issue with:
+- Clear description of the problem
+- Steps to reproduce
+- Expected vs actual behavior
+- Browser version and OS
 
-## 🎨 Design
+### Suggest Features
+Open an issue with:
+- Feature description
+- Use case / motivation
+- Mockups or examples (if applicable)
 
-- **Inspiration**: Slack's clean, modern design
-- **Colors**: Match platform (Claude blue, ChatGPT green, Gemini accent)
-- **Dark Mode**: Automatic based on system preference
-- **Responsive**: Works from 375px (mobile) to 4K
-- **Typography**: System font stack for native feel
+### Submit Code
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
----
-
-## 📦 Tech Stack
-
-- **Manifest V3** - Modern Chrome extension standard
-- **Vanilla JavaScript** - No dependencies in extension
-- **CSS Grid/Flexbox** - Responsive layout
-- **localStorage** - Persistent storage
-- **Puppeteer** - Testing (optional)
-
----
-
-## 🔒 Privacy
-
-✓ No backend server  
-✓ No tracking  
-✓ No account needed  
-✓ All data local  
-✓ Open source  
+### Code Style
+- Use vanilla JavaScript (no frameworks)
+- Follow existing code structure
+- Comment complex logic
+- Test on Chrome, Edge, and Brave
 
 ---
 
-## 📝 Notes
+## 📋 Changelog
 
-- Extension works **offline**
-- Data syncs across tabs automatically
-- Chat changes detected every 500ms
-- Search is case-insensitive
-- Export/import uses standard JSON format
+[View full changelog](CHANGELOG.md)
 
 ---
 
-## 🎯 Performance
+## 📄 License
 
-| Metric | Value |
-|--------|-------|
-| Extension size | ~50KB |
-| Memory with 100 items | ~5MB |
-| Render time | <100ms |
-| Search time | <50ms |
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
-## 📄 Files
+## 🙋 Support
 
-- `manifest.json` - Extension config
-- `content-script.js` - Main logic (1000+ lines)
-- `styles.css` - Modern styling
-- `background.js` - Service worker
-- `TEST_SUITE.md` - Detailed test specs
-- `test-runner.js` - Automated tests
-- `README.md` - This file
+### Need Help?
+- 🐛 Report bugs on [GitHub Issues](https://github.com/sakshij/llm-chat-assistant)
+- 💬 Ask questions in [Discussions](https://github.com/sakshij/llm-chat-assistant)
 
----
-
-## 🚀 Future Enhancements
-
-Possible additions (not in v2.0):
-- Multi-LLM linking
-- Cloud sync
-- Collaborative features
-- Custom tags
-- Advanced filtering
-- Keyboard shortcuts
-- Custom colors
+### Feedback
+We'd love to hear from you! If LLM Chat Assistant has been helpful, consider:
+- ⭐ Starring the repository
+- 📝 Leaving a review on the Chrome Web Store
+- 🐦 Sharing with others who might find it useful
 
 ---
 
-## 📞 Support
+## 👨‍💻 Author
 
-1. Check `TEST_SUITE.md` for common issues
-2. Review `README.md` troubleshooting
-3. Verify extension files are complete
-4. Test in incognito mode to isolate issues
+Created by [Sakshi Jain](https://github.com/sakshij)
 
 ---
 
-**Version**: 2.0  
-**Status**: Complete & Tested  
-**Last Updated**: 2026-02-16  
+## 🙏 Acknowledgments
 
-Happy researching! 🚀
+- Inspired by the needs of researchers and students
+- Built for the AI assistant era
+- Designed with privacy and simplicity in mind
+
+---
+
+<div align="center">
+
+**[Install Now](#-installation) | [View Demo](#-screenshots) | [Report Bug](https://github.com/sakshij/llm-chat-assistant/issues)**
+
+Made with ❤️ for researchers everywhere
+
+</div>

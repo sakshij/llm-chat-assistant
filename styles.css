@@ -1,4 +1,4 @@
-/* Research Tree - Modern Sleek Design (v2.0.3) */
+/* LLM Chat Assistant - Modern Sleek Design (v1.0.0) */
 
 :root {
   --primary-color: #3b82f6;
@@ -30,7 +30,7 @@
 
 /* ============ SIDEBAR MODES ============ */
 
-.research-sidebar {
+.llm-sidebar {
   position: fixed;
   right: 0;
   background: var(--bg-primary);
@@ -44,47 +44,56 @@
   color: var(--text-primary);
 }
 
-.research-sidebar-full {
-  width: 30vw;
+.llm-sidebar-full {
   min-width: 300px;
   max-width: 800px;
   height: 90vh;
   bottom: 0;
 }
 
-.research-sidebar-half {
-  width: 30vw;
+.llm-sidebar-half {
   min-width: 300px;
   max-width: 800px;
   height: 50vh;
   bottom: 0;
 }
 
-.research-sidebar-minimized {
-  width: 45px;
-  height: 45px;
+.llm-sidebar-minimized {
+  width: 45px !important;
+  height: 45px !important;
+  min-width: 45px !important;
+  max-width: 45px !important;
   bottom: 20px;
   border-radius: 8px;
-  border: none;
+  border: 2px solid var(--border-color);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
-  background: var(--primary-color);
+  font-size: 20px;
+  background: var(--bg-primary);
+  color: var(--text-secondary);
+  transition: all 0.2s;
 }
 
-.research-sidebar-minimized::before {
-  content: '📋';
+.llm-sidebar-minimized:hover {
+  border-color: var(--primary-color);
+  background: var(--bg-secondary);
+  color: var(--primary-color);
 }
 
-.research-sidebar-minimized * {
+.llm-sidebar-minimized::before {
+  content: '☰';
+  font-weight: 300;
+}
+
+.llm-sidebar-minimized * {
   display: none !important;
 }
 
 /* ============ RESIZE HANDLE ============ */
 
-.research-resize-handle {
+.llm-resize-handle {
   position: absolute;
   left: 0;
   top: 0;
@@ -96,13 +105,13 @@
   z-index: 10;
 }
 
-.research-resize-handle:hover {
+.llm-resize-handle:hover {
   background: var(--primary-color);
 }
 
 /* ============ HEADER ============ */
 
-.research-header {
+.llm-header {
   padding: 16px;
   border-bottom: 1px solid var(--border-color);
   display: flex;
@@ -112,7 +121,7 @@
   flex-shrink: 0;
 }
 
-.research-header h2 {
+.llm-header h2 {
   margin: 0;
   font-size: 14px;
   font-weight: 600;
@@ -120,14 +129,14 @@
   letter-spacing: 0.3px;
 }
 
-.research-header-buttons {
+.llm-header-buttons {
   display: flex;
   gap: 6px;
 }
 
 /* ============ BUTTONS ============ */
 
-.research-btn {
+.llm-btn {
   padding: 6px 12px;
   border: 1px solid var(--border-color);
   background: var(--bg-primary);
@@ -140,13 +149,13 @@
   font-weight: 500;
 }
 
-.research-btn:hover {
+.llm-btn:hover {
   border-color: var(--primary-color);
   background: var(--bg-secondary);
   color: var(--primary-color);
 }
 
-.research-btn-icon {
+.llm-btn-icon {
   width: 32px;
   height: 32px;
   padding: 0;
@@ -157,63 +166,63 @@
 }
 
 /* Subtle button style for footer buttons - no colors */
-.research-btn-subtle {
+.llm-btn-subtle {
   background: var(--bg-primary);
   color: var(--text-primary);
   border-color: var(--border-color);
   flex: 1;
 }
 
-.research-btn-subtle:hover {
+.llm-btn-subtle:hover {
   background: var(--bg-secondary);
   border-color: var(--primary-color);
   color: var(--primary-color);
 }
 
-.research-btn-sm {
+.llm-btn-sm {
   padding: 4px 8px;
   font-size: 11px;
 }
 
-.research-btn-save {
-  background: var(--success-color);
-  color: white;
-  border-color: var(--success-color);
-  width: 40px;
-  height: 40px;
+.llm-btn-save {
+  background: var(--bg-primary);
+  color: var(--text-secondary);
+  border-color: var(--border-color);
+  width: 24px;
+  height: 24px;
   padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 18px;
+  font-size: 12px;
 }
 
-.research-btn-save:hover {
-  background: #059669;
-  border-color: #059669;
-  color: white;
+.llm-btn-save:hover {
+  background: var(--bg-secondary);
+  border-color: var(--primary-color);
+  color: var(--success-color);
 }
 
-.research-btn-cancel {
-  background: var(--error-color);
-  color: white;
-  border-color: var(--error-color);
-  width: 40px;
-  height: 40px;
+.llm-btn-cancel {
+  background: var(--bg-primary);
+  color: var(--text-secondary);
+  border-color: var(--border-color);
+  width: 24px;
+  height: 24px;
   padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 18px;
+  font-size: 12px;
 }
 
-.research-btn-cancel:hover {
-  background: #dc2626;
-  border-color: #dc2626;
-  color: white;
+.llm-btn-cancel:hover {
+  background: var(--bg-secondary);
+  border-color: var(--primary-color);
+  color: var(--error-color);
 }
 
-.research-btn-close {
+.llm-btn-close {
   padding: 4px 8px;
   border: none;
   background: transparent;
@@ -221,21 +230,37 @@
   color: var(--text-secondary);
 }
 
-.research-btn-close:hover {
+.llm-btn-close:hover {
   color: var(--text-primary);
   background: transparent;
   border: none;
 }
 
+/* Chevron button - always visible on right side */
+.llm-chevron-btn {
+  width: 24px !important;
+  height: 24px !important;
+  padding: 0 !important;
+  font-size: 12px !important;
+  margin-left: 8px;
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+
+.llm-chevron-btn:hover {
+  opacity: 1;
+  background: var(--bg-secondary);
+}
+
 /* ============ SEARCH ============ */
 
-.research-search-box {
+.llm-search-box {
   padding: 12px;
   border-bottom: 1px solid var(--border-color);
   flex-shrink: 0;
 }
 
-#research-search-input {
+#llm-search-input {
   width: 100%;
   padding: 8px 12px;
   border: 1px solid var(--border-color);
@@ -246,7 +271,7 @@
   font-family: inherit;
 }
 
-#research-search-input:focus {
+#llm-search-input:focus {
   outline: none;
   border-color: var(--primary-color);
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
@@ -254,28 +279,28 @@
 
 /* ============ TREE CONTAINER ============ */
 
-.research-tree-container {
+.llm-tree-container {
   flex: 1;
   overflow-y: auto;
   padding: 12px;
 }
 
-.research-tree-container::-webkit-scrollbar {
+.llm-tree-container::-webkit-scrollbar {
   width: 6px;
 }
 
-.research-tree-container::-webkit-scrollbar-track {
+.llm-tree-container::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.research-tree-container::-webkit-scrollbar-thumb {
+.llm-tree-container::-webkit-scrollbar-thumb {
   background: var(--border-color);
   border-radius: 3px;
 }
 
 /* ============ ITEMS ============ */
 
-.research-item {
+.llm-item {
   margin-bottom: 8px;
   border: 1px solid var(--border-color);
   border-radius: 8px;
@@ -284,24 +309,24 @@
   transition: all 0.2s;
 }
 
-.research-item:hover {
+.llm-item:hover {
   border-color: var(--primary-color);
   box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
 }
 
-.research-item-todo {
+.llm-item-todo {
   border-left: 3px solid var(--success-color);
 }
 
-.research-item-finding {
+.llm-item-finding {
   border-left: 3px solid var(--warning-color);
 }
 
-.research-item-question {
+.llm-item-question {
   border-left: 3px solid #3b82f6;
 }
 
-.research-item-row {
+.llm-item-row {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -310,25 +335,25 @@
   transition: all 0.2s;
 }
 
-.research-item-row:hover {
+.llm-item-row:hover {
   background: var(--bg-secondary);
 }
 
-.research-item-completed {
+.llm-item-completed {
   opacity: 0.6;
 }
 
-.research-item-completed .research-item-text {
+.llm-item-completed .llm-item-text {
   text-decoration: line-through;
   color: var(--text-secondary);
 }
 
-.research-item-icon {
+.llm-item-icon {
   font-size: 16px;
   flex-shrink: 0;
 }
 
-.research-item-text {
+.llm-item-text {
   flex: 1;
   font-size: 13px;
   color: var(--text-primary);
@@ -337,7 +362,7 @@
   min-width: 0;
 }
 
-.research-item-actions {
+.llm-item-actions {
   display: flex;
   gap: 6px;
   align-items: center;
@@ -346,19 +371,19 @@
   transition: opacity 0.2s;
 }
 
-.research-item-row:hover .research-item-actions {
+.llm-item-row:hover .llm-item-actions {
   opacity: 1;
 }
 
-.research-checkbox {
+.llm-checkbox {
   cursor: pointer;
   width: 18px;
   height: 18px;
   accent-color: var(--success-color);
 }
 
-.research-link-btn,
-.research-delete-btn {
+.llm-link-btn,
+.llm-delete-btn {
   padding: 2px 4px;
   font-size: 14px;
   background: none;
@@ -368,15 +393,15 @@
   transition: all 0.2s;
 }
 
-.research-link-btn:hover,
-.research-delete-btn:hover {
+.llm-link-btn:hover,
+.llm-delete-btn:hover {
   color: var(--primary-color);
   transform: scale(1.1);
 }
 
 /* ============ CHILDREN ============ */
 
-.research-children {
+.llm-children {
   padding: 8px;
   padding-left: 12px;
   border-left: 2px solid var(--border-color);
@@ -386,7 +411,7 @@
 
 /* ============ ADD BUTTONS ============ */
 
-.research-item-add-buttons {
+.llm-item-add-buttons {
   padding: 8px;
   border-top: 1px solid var(--border-color);
   background: var(--bg-secondary);
@@ -395,7 +420,7 @@
   flex-wrap: wrap;
 }
 
-.research-add-child-btn {
+.llm-add-child-btn {
   padding: 4px 8px;
   font-size: 11px;
   flex: 1;
@@ -404,21 +429,20 @@
 
 /* ============ INLINE EDITOR - CLEANED UP BORDERS ============ */
 
-.research-inline-editor {
+.llm-inline-editor {
   margin: 8px 0;
   padding: 12px;
   background: var(--bg-secondary);
   border-radius: 8px;
-  /* Removed the extra border to clean up the UI */
 }
 
-.research-input-box {
+.llm-input-box {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.research-textarea {
+.llm-textarea {
   width: 100%;
   min-height: 80px;
   padding: 10px;
@@ -431,13 +455,13 @@
   resize: vertical;
 }
 
-.research-textarea:focus {
+.llm-textarea:focus {
   outline: none;
   border-color: var(--primary-color);
   box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
 }
 
-.research-input-actions {
+.llm-input-actions {
   display: flex;
   gap: 6px;
   justify-content: flex-end;
@@ -445,7 +469,7 @@
 
 /* ============ POPUP ============ */
 
-.research-popup {
+.llm-popup {
   position: fixed;
   background: var(--bg-primary);
   border: 2px solid var(--primary-color);
@@ -467,11 +491,11 @@
   }
 }
 
-.research-popup-content {
+.llm-popup-content {
   padding: 12px;
 }
 
-.research-popup-text {
+.llm-popup-text {
   margin: 0 0 10px 0;
   font-size: 12px;
   color: var(--text-secondary);
@@ -481,14 +505,14 @@
   overflow: hidden;
 }
 
-.research-popup-buttons {
+.llm-popup-buttons {
   display: flex;
   gap: 6px;
 }
 
 /* ============ ERRORS ============ */
 
-.research-inline-error {
+.llm-inline-error {
   padding: 10px 12px;
   margin-bottom: 10px;
   background: #fef3c7;
@@ -500,7 +524,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .research-inline-error {
+  .llm-inline-error {
     background: #78350f;
     border-color: #f59e0b;
     color: #fcd34d;
@@ -509,14 +533,14 @@
 
 /* ============ FOOTER ============ */
 
-.research-footer {
+.llm-footer {
   padding: 12px;
   border-top: 1px solid var(--border-color);
   background: var(--bg-secondary);
   flex-shrink: 0;
 }
 
-.research-footer-buttons {
+.llm-footer-buttons {
   display: flex;
   gap: 4px;
   flex-wrap: wrap;

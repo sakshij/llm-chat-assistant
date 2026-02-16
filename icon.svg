@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!-- Background -->
+  <rect width="128" height="128" rx="20" fill="#3b82f6"/>
+  
+  <!-- Tree structure -->
+  <g fill="#ffffff">
+    <!-- Trunk -->
+    <rect x="59" y="70" width="10" height="30" rx="2"/>
+    
+    <!-- Root node (top) -->
+    <circle cx="64" cy="35" r="8"/>
+    
+    <!-- First level branches -->
+    <line x1="64" y1="43" x2="64" y2="55" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+    
+    <!-- Left branch -->
+    <line x1="64" y1="55" x2="40" y2="65" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="40" cy="65" r="6"/>
+    
+    <!-- Center branch -->
+    <circle cx="64" cy="55" r="6"/>
+    
+    <!-- Right branch -->
+    <line x1="64" y1="55" x2="88" y2="65" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="88" cy="65" r="6"/>
+    
+    <!-- Second level (children) -->
+    <!-- Left children -->
+    <line x1="40" y1="71" x2="30" y2="80" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+    <circle cx="30" cy="80" r="4"/>
+    <line x1="40" y1="71" x2="50" y2="80" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+    <circle cx="50" cy="80" r="4"/>
+    
+    <!-- Right children -->
+    <line x1="88" y1="71" x2="78" y2="80" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+    <circle cx="78" cy="80" r="4"/>
+    <line x1="88" y1="71" x2="98" y2="80" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+    <circle cx="98" cy="80" r="4"/>
+  </g>
+  
+  <!-- Accent dot (represents "capture") -->
+  <circle cx="64" cy="35" r="3" fill="#fbbf24"/>
+</svg>

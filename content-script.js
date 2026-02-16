@@ -1,4 +1,4 @@
-// Research Tree - Content Script (v2.0.3 - UI Improvements)
+// LLM Chat Assistant - Content Script (v1.0.0)
 // Comprehensive implementation with all features
 
 const Config = {
@@ -13,7 +13,9 @@ let state = {
   sidebarInjected: false,
   currentMode: 'full',
   currentStorageKey: null,
-  selectionPopupActive: false
+  selectionPopupActive: false,
+  sidebarWidth: 400, // Store current width in pixels
+  expandedItems: {} // Track which parent items are expanded
 };
 
 // ============ STORAGE KEY DETECTION ============
@@ -165,6 +167,12 @@ function addItem(parentId, content, type, fromChat = false) {
   
   data.items.push(newItem);
   saveData(data);
+  
+  // Auto-expand parent when adding child
+  if (parentId) {
+    state.expandedItems[parentId] = true;
+  }
+  
   return { item: newItem };
 }
 
@@ -194,35 +202,36 @@ function injectSidebar() {
   if (state.sidebarInjected) return;
 
   const sidebar = document.createElement('div');
-  sidebar.id = 'research-tree-sidebar';
-  sidebar.className = 'research-sidebar research-sidebar-full';
+  sidebar.id = 'llm-chat-sidebar';
+  sidebar.className = 'llm-sidebar llm-sidebar-full';
+  sidebar.style.width = state.sidebarWidth + 'px';
   
   sidebar.innerHTML = `
-    <div class="research-resize-handle" id="research-resize-handle" title="Drag to resize"></div>
-    <div class="research-header">
-      <h2>Research Tree</h2>
-      <div class="research-header-buttons">
-        <button id="research-export" class="research-btn research-btn-icon" title="Export">⬇</button>
-        <button id="research-import" class="research-btn research-btn-icon" title="Import">⬆</button>
-        <button id="research-expand-collapse" class="research-btn research-btn-icon" title="Expand/Collapse">⛶</button>
-        <button id="research-minimize" class="research-btn research-btn-icon" title="Minimize">−</button>
+    <div class="llm-resize-handle" id="llm-resize-handle" title="Drag to resize"></div>
+    <div class="llm-header">
+      <h2>LLM Chat Assistant</h2>
+      <div class="llm-header-buttons">
+        <button id="llm-export" class="llm-btn llm-btn-icon" title="Export">⬇</button>
+        <button id="llm-import" class="llm-btn llm-btn-icon" title="Import">⬆</button>
+        <button id="llm-expand-collapse" class="llm-btn llm-btn-icon" title="Expand/Collapse">⛶</button>
+        <button id="llm-minimize" class="llm-btn llm-btn-icon" title="Minimize">−</button>
       </div>
     </div>
     
-    <div class="research-search-box">
-      <input type="text" id="research-search-input" placeholder="Search..." />
+    <div class="llm-search-box">
+      <input type="text" id="llm-search-input" placeholder="Search..." />
     </div>
     
-    <div class="research-tree-container" id="research-tree-container"></div>
+    <div class="llm-tree-container" id="llm-tree-container"></div>
     
-    <div class="research-footer">
-      <div class="research-footer-buttons">
-        <button id="research-add-finding" class="research-btn research-btn-subtle" data-type="finding">💡 Note</button>
-        <button id="research-add-todo" class="research-btn research-btn-subtle" data-type="todo">✓ Todo</button>
-        <button id="research-add-question" class="research-btn research-btn-subtle" data-type="question">❓ Question</button>
+    <div class="llm-footer">
+      <div class="llm-footer-buttons">
+        <button id="llm-add-finding" class="llm-btn llm-btn-subtle" data-type="finding">💡 Note</button>
+        <button id="llm-add-todo" class="llm-btn llm-btn-subtle" data-type="todo">✓ Todo</button>
+        <button id="llm-add-question" class="llm-btn llm-btn-subtle" data-type="question">❓ Question</button>
       </div>
     </div>
-    <input type="file" id="research-import-file" accept=".json" style="display:none;" />
+    <input type="file" id="llm-import-file" accept=".json" style="display:none;" />
   `;
   
   document.body.appendChild(sidebar);
@@ -233,18 +242,18 @@ function injectSidebar() {
 }
 
 function attachSidebarListeners() {
-  const expandBtn = document.getElementById('research-expand-collapse');
-  const minimizeBtn = document.getElementById('research-minimize');
-  const addFindingBtn = document.getElementById('research-add-finding');
-  const addTodoBtn = document.getElementById('research-add-todo');
-  const addQuestionBtn = document.getElementById('research-add-question');
-  const searchInput = document.getElementById('research-search-input');
-  const exportBtn = document.getElementById('research-export');
-  const importBtn = document.getElementById('research-import');
-  const importFileInput = document.getElementById('research-import-file');
-  const resizeHandle = document.getElementById('research-resize-handle');
+  const expandBtn = document.getElementById('llm-expand-collapse');
+  const minimizeBtn = document.getElementById('llm-minimize');
+  const addFindingBtn = document.getElementById('llm-add-finding');
+  const addTodoBtn = document.getElementById('llm-add-todo');
+  const addQuestionBtn = document.getElementById('llm-add-question');
+  const searchInput = document.getElementById('llm-search-input');
+  const exportBtn = document.getElementById('llm-export');
+  const importBtn = document.getElementById('llm-import');
+  const importFileInput = document.getElementById('llm-import-file');
+  const resizeHandle = document.getElementById('llm-resize-handle');
   
-  const sidebar = document.getElementById('research-tree-sidebar');
+  const sidebar = document.getElementById('llm-chat-sidebar');
   
   // Resize functionality
   if (resizeHandle && sidebar) {
@@ -266,6 +275,7 @@ function attachSidebarListeners() {
       const diff = startX - e.clientX;
       const newWidth = Math.min(Math.max(startWidth + diff, 300), 800);
       sidebar.style.width = newWidth + 'px';
+      state.sidebarWidth = newWidth; // Remember width
     });
     
     document.addEventListener('mouseup', () => {
@@ -351,13 +361,18 @@ function attachSidebarListeners() {
 }
 
 function updateSidebarMode() {
-  const sidebar = document.getElementById('research-tree-sidebar');
+  const sidebar = document.getElementById('llm-chat-sidebar');
   if (!sidebar) return;
   
-  sidebar.className = `research-sidebar research-sidebar-${state.currentMode}`;
+  sidebar.className = `llm-sidebar llm-sidebar-${state.currentMode}`;
   
-  const expandBtn = document.getElementById('research-expand-collapse');
-  const minimizeBtn = document.getElementById('research-minimize');
+  // Restore width when expanding from minimized
+  if (state.currentMode !== 'minimized') {
+    sidebar.style.width = state.sidebarWidth + 'px';
+  }
+  
+  const expandBtn = document.getElementById('llm-expand-collapse');
+  const minimizeBtn = document.getElementById('llm-minimize');
   
   if (state.currentMode === 'minimized') {
     if (expandBtn) expandBtn.style.display = 'none';
@@ -372,7 +387,7 @@ function updateSidebarMode() {
 
 function renderTree() {
   const data = loadData();
-  const container = document.getElementById('research-tree-container');
+  const container = document.getElementById('llm-tree-container');
   if (!container) return;
   
   container.innerHTML = '';
@@ -385,49 +400,54 @@ function renderTree() {
 
 function renderItemElement(item, allItems) {
   const div = document.createElement('div');
-  div.className = `research-item research-item-${item.type}`;
+  div.className = `llm-item llm-item-${item.type}`;
   div.dataset.itemId = item.id;
   
   const children = allItems.filter(i => i.parentId === item.id);
-  const strikeClass = item.completed ? 'research-item-completed' : '';
+  const strikeClass = item.completed ? 'llm-item-completed' : '';
+  const isExpanded = state.expandedItems[item.id] || false;
+  
+  // Chevron for ALL root items (whether they have children or not)
+  const chevronIcon = !item.parentId ? 
+    `<button class="llm-btn llm-btn-icon llm-chevron-btn" data-item-id="${item.id}" title="${isExpanded ? 'Collapse' : 'Expand'}">${isExpanded ? '▼' : '◀'}</button>` : '';
   
   div.innerHTML = `
-    <div class="research-item-row ${strikeClass}">
-      <span class="research-item-icon">${getTypeIcon(item.type)}</span>
-      <span class="research-item-text">${escapeHtml(item.content)}</span>
-      <div class="research-item-actions">
-        ${item.type === 'todo' ? `<input type="checkbox" class="research-checkbox" data-id="${item.id}" ${item.completed ? 'checked' : ''} />` : ''}
-        ${item.fromChat ? `<button class="research-btn research-btn-icon research-link-btn" data-id="${item.id}" title="Jump to message">🔗</button>` : ''}
-        <button class="research-btn research-btn-icon research-delete-btn" data-id="${item.id}" title="Delete">🗑️</button>
+    <div class="llm-item-row ${strikeClass}">
+      <span class="llm-item-icon">${getTypeIcon(item.type)}</span>
+      <span class="llm-item-text">${escapeHtml(item.content)}</span>
+      <div class="llm-item-actions">
+        ${item.type === 'todo' ? `<input type="checkbox" class="llm-checkbox" data-id="${item.id}" ${item.completed ? 'checked' : ''} />` : ''}
+        ${item.fromChat ? `<button class="llm-btn llm-btn-icon llm-link-btn" data-id="${item.id}" title="Jump to message">🔗</button>` : ''}
+        <button class="llm-btn llm-btn-icon llm-delete-btn" data-id="${item.id}" title="Delete">🗑️</button>
       </div>
+      ${chevronIcon}
     </div>
   `;
   
-  // Add children container if has children
-  if (children.length > 0) {
+  // Add children container if has children AND is expanded
+  if (children.length > 0 && isExpanded) {
     const childrenDiv = document.createElement('div');
-    childrenDiv.className = 'research-children';
+    childrenDiv.className = 'llm-children';
     children.forEach(child => {
       childrenDiv.appendChild(renderItemElement(child, allItems));
     });
     div.appendChild(childrenDiv);
   }
   
-  // IMPORTANT: Only show add buttons if this is a ROOT item (no parentId)
-  // Children should NOT have add buttons (1 level nesting max)
-  if (!item.parentId && children.length < Config.MAX_CHILDREN) {
+  // Add buttons ONLY if root item AND expanded (removed the "or no children" condition)
+  if (!item.parentId && isExpanded && children.length < Config.MAX_CHILDREN) {
     const buttonsDiv = document.createElement('div');
-    buttonsDiv.className = 'research-item-add-buttons';
+    buttonsDiv.className = 'llm-item-add-buttons';
     buttonsDiv.innerHTML = `
-      <button class="research-btn research-btn-sm research-add-child-btn" data-parent-id="${item.id}" data-type="finding">+ Note</button>
-      <button class="research-btn research-btn-sm research-add-child-btn" data-parent-id="${item.id}" data-type="todo">+ Todo</button>
-      <button class="research-btn research-btn-sm research-add-child-btn" data-parent-id="${item.id}" data-type="question">+ Question</button>
+      <button class="llm-btn llm-btn-sm llm-add-child-btn" data-parent-id="${item.id}" data-type="finding">+ Note</button>
+      <button class="llm-btn llm-btn-sm llm-add-child-btn" data-parent-id="${item.id}" data-type="todo">+ Todo</button>
+      <button class="llm-btn llm-btn-sm llm-add-child-btn" data-parent-id="${item.id}" data-type="question">+ Question</button>
     `;
     div.appendChild(buttonsDiv);
   }
   
   // Attach event listeners
-  const checkbox = div.querySelector('.research-checkbox');
+  const checkbox = div.querySelector('.llm-checkbox');
   if (checkbox) {
     checkbox.addEventListener('change', (e) => {
       updateItem(item.id, { completed: e.target.checked });
@@ -435,14 +455,14 @@ function renderItemElement(item, allItems) {
     });
   }
   
-  const linkBtn = div.querySelector('.research-link-btn');
+  const linkBtn = div.querySelector('.llm-link-btn');
   if (linkBtn) {
     linkBtn.addEventListener('click', () => {
       jumpToMessage(item.content);
     });
   }
   
-  const deleteBtn = div.querySelector('.research-delete-btn');
+  const deleteBtn = div.querySelector('.llm-delete-btn');
   if (deleteBtn) {
     deleteBtn.addEventListener('click', () => {
       deleteItem(item.id);
@@ -450,7 +470,17 @@ function renderItemElement(item, allItems) {
     });
   }
   
-  const addChildBtns = div.querySelectorAll('.research-add-child-btn');
+  const chevronBtn = div.querySelector('.llm-chevron-btn');
+  if (chevronBtn) {
+    chevronBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const itemId = parseInt(e.target.dataset.itemId);
+      state.expandedItems[itemId] = !state.expandedItems[itemId];
+      renderTree();
+    });
+  }
+  
+  const addChildBtns = div.querySelectorAll('.llm-add-child-btn');
   addChildBtns.forEach(btn => {
     btn.addEventListener('click', (e) => {
       const parentId = parseInt(e.target.dataset.parentId);
@@ -477,33 +507,32 @@ function escapeHtml(text) {
 
 function showAddItemUI(parentId = null, type = 'finding') {
   // Clear any existing inline editor
-  const existing = document.querySelector('.research-inline-editor');
+  const existing = document.querySelector('.llm-inline-editor');
   if (existing) existing.remove();
   
   const editor = document.createElement('div');
-  editor.className = 'research-inline-editor';
+  editor.className = 'llm-inline-editor';
   
-  // Always show text input (type is provided)
   editor.innerHTML = `
-    <div class="research-input-box">
-      <textarea id="research-new-item-input" placeholder="Type here..." class="research-textarea"></textarea>
-      <div class="research-input-actions">
-        <button class="research-btn research-btn-save">✓</button>
-        <button class="research-btn research-btn-cancel">✕</button>
+    <div class="llm-input-box">
+      <textarea id="llm-new-item-input" placeholder="Type here..." class="llm-textarea"></textarea>
+      <div class="llm-input-actions">
+        <button class="llm-btn llm-btn-save">✓</button>
+        <button class="llm-btn llm-btn-cancel">✕</button>
       </div>
     </div>
   `;
   
-  const container = parentId ? document.querySelector(`[data-item-id="${parentId}"]`) : document.getElementById('research-tree-container');
+  const container = parentId ? document.querySelector(`[data-item-id="${parentId}"]`) : document.getElementById('llm-tree-container');
   if (!container) return;
   
   container.appendChild(editor);
   
-  const textarea = document.getElementById('research-new-item-input');
+  const textarea = document.getElementById('llm-new-item-input');
   textarea.focus();
   
-  const saveBtn = editor.querySelector('.research-btn-save');
-  const cancelBtn = editor.querySelector('.research-btn-cancel');
+  const saveBtn = editor.querySelector('.llm-btn-save');
+  const cancelBtn = editor.querySelector('.llm-btn-cancel');
   
   saveBtn.addEventListener('click', () => {
     const content = textarea.value.trim();
@@ -540,7 +569,7 @@ function setupTextSelection() {
 
 function handleTextSelection() {
   if (state.selectionPopupActive) return;
-  if (event.target.closest('#research-tree-sidebar')) return;
+  if (event.target.closest('#llm-chat-sidebar')) return;
   
   const selected = window.getSelection().toString().trim();
   const wordCount = selected.split(/\s+/).length;
@@ -552,21 +581,21 @@ function handleTextSelection() {
 }
 
 function showSelectionPopup(text) {
-  const existing = document.getElementById('research-selection-popup');
+  const existing = document.getElementById('llm-selection-popup');
   if (existing) existing.remove();
   
   const popup = document.createElement('div');
-  popup.id = 'research-selection-popup';
-  popup.className = 'research-popup';
+  popup.id = 'llm-selection-popup';
+  popup.className = 'llm-popup';
   
   popup.innerHTML = `
-    <div class="research-popup-content">
-      <p class="research-popup-text">"${escapeHtml(text.substring(0, 100))}"</p>
-      <div class="research-popup-buttons">
-        <button class="research-btn research-btn-type" data-type="finding" title="Add as Note">💡</button>
-        <button class="research-btn research-btn-type" data-type="todo" title="Add as Todo">✓</button>
-        <button class="research-btn research-btn-type" data-type="question" title="Add as Question">❓</button>
-        <button class="research-btn research-btn-close" title="Close">×</button>
+    <div class="llm-popup-content">
+      <p class="llm-popup-text">"${escapeHtml(text.substring(0, 100))}"</p>
+      <div class="llm-popup-buttons">
+        <button class="llm-btn llm-btn-type" data-type="finding" title="Add as Note">💡</button>
+        <button class="llm-btn llm-btn-type" data-type="todo" title="Add as Todo">✓</button>
+        <button class="llm-btn llm-btn-type" data-type="question" title="Add as Question">❓</button>
+        <button class="llm-btn llm-btn-close" title="Close">×</button>
       </div>
     </div>
   `;
@@ -598,7 +627,7 @@ function showSelectionPopup(text) {
     });
   });
   
-  const closeBtn = popup.querySelector('.research-btn-close');
+  const closeBtn = popup.querySelector('.llm-btn-close');
   if (closeBtn) {
     closeBtn.addEventListener('click', () => {
       popup.remove();
@@ -641,7 +670,7 @@ function jumpToMessage(text) {
       let inSidebar = false;
       let current = element;
       while (current) {
-        if (current.id === 'research-tree-sidebar') {
+        if (current.id === 'llm-chat-sidebar') {
           inSidebar = true;
           break;
         }
@@ -674,14 +703,14 @@ function jumpToMessage(text) {
 // ============ ERROR HANDLING ============
 
 function showInlineError(message) {
-  const existing = document.querySelector('.research-inline-error');
+  const existing = document.querySelector('.llm-inline-error');
   if (existing) existing.remove();
   
   const error = document.createElement('div');
-  error.className = 'research-inline-error';
+  error.className = 'llm-inline-error';
   error.textContent = '⚠️ ' + message;
   
-  const container = document.getElementById('research-tree-container');
+  const container = document.getElementById('llm-tree-container');
   if (container) {
     container.insertBefore(error, container.firstChild);
   }
@@ -694,9 +723,9 @@ function showInlineError(message) {
 // ============ SEARCH ============
 
 function filterTree(searchTerm) {
-  const items = document.querySelectorAll('.research-item');
+  const items = document.querySelectorAll('.llm-item');
   items.forEach(item => {
-    const text = item.querySelector('.research-item-text')?.textContent.toLowerCase() || '';
+    const text = item.querySelector('.llm-item-text')?.textContent.toLowerCase() || '';
     const matches = text.includes(searchTerm.toLowerCase());
     item.style.display = matches || !searchTerm ? 'block' : 'none';
   });
@@ -711,7 +740,7 @@ function exportData() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `research-tree-${new Date().toISOString().split('T')[0]}.json`;
+  a.download = `llm-chat-assistant-${new Date().toISOString().split('T')[0]}.json`;
   a.click();
   URL.revokeObjectURL(url);
 }
